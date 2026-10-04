@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Smart Campus Lost & Found Hub - report, search and recover lost items on campus.">
+  <title>Smart Campus Lost & Found Hub</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-theme="dark">
+
+  <div class="glow-ring ring-1" aria-hidden="true"></div>
+  <div class="glow-ring ring-2" aria-hidden="true"></div>
+
+  <header class="app-header">
+    <div class="header-container">
+      <a href="#top" class="app-logo" aria-label="Smart Campus Lost and Found Hub">
+        <span class="logo-mark">LF</span> Smart Campus <span class="accent">Lost &amp; Found</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#dashboard">Dashboard</a>
+        <a href="#report">Report Item</a>
+        <a href="#about">About</a>
+      </nav>
+      <button id="theme-toggle" class="btn-ghost" aria-label="Toggle light or dark theme">🌓 Theme</button>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-inner">
+        <p class="eyebrow">B.Tech Mini Project &middot; Web Application</p>
+        <h1>Recover what matters, <span class="accent">faster</span>.</h1>
+        <p class="hero-sub">A centralised campus platform where students and staff can report lost items, log found items, and reconnect belongings with their owners in minutes.</p>
+        <div class="hero-cta">
+          <a href="#report" class="btn-primary">Report an Item</a>
+          <a href="#dashboard" class="btn-outline">Browse Listings</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Statistics -->
+    <section class="stats-strip" aria-label="Live statistics">
+      <div class="stat-item"><span class="stat-label">Total Reports</span><span id="stat-total" class="stat-value">0</span></div>
+      <div class="stat-item"><span class="stat-label">Lost (Open)</span><span id="stat-lost" class="stat-value text-lost">0</span></div>
+      <div class="stat-item"><span class="stat-label">Found (Open)</span><span id="stat-found" class="stat-value text-found">0</span></div>
+      <div class="stat-item"><span class="stat-label">Resolved</span><span id="stat-resolved" class="stat-value">0</span></div>
+      <div class="stat-item"><span class="stat-label">Recovery Rate</span><span id="stat-rate" class="stat-value text-accent">0%</span></div>
+    </section>
+
+    <div class="main-layout" id="dashboard">
+
+      <!-- Report form -->
+      <aside class="sidebar" id="report">
+        <section class="card glass-card">
+          <h2 class="section-title">Report a Campus Item</h2>
+          <p class="section-sub">Fields marked * are required.</p>
+          <form id="item-form" novalidate>
+            <div class="form-group">
+              <label for="item-title">Item Name *</label>
+              <input type="text" id="item-title" maxlength="60" placeholder="e.g., Black Leather Wallet">
+              <span class="error-msg" id="error-title"></span>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="item-type">Report Type</label>
+                <select id="item-type">
+                  <option value="lost">🚨 Lost</option>
+                  <option value="found">✅ Found</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="item-category">Category</label>
+                <select id="item-category">
+                  <option>Electronics</option>
+                  <option>Documents</option>
+                  <option>Keys</option>
+                  <option>Clothing</option>
+                  <option>Accessories</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="item-date">Date Lost / Found *</label>
+              <input type="date" id="item-date">
+              <span class="error-msg" id="error-date"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="item-location">Campus Location *</label>
+              <input type="text" id="item-location" maxlength="80" placeholder="e.g., Central Library, Block C 204">
+              <span class="error-msg" id="error-location"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="item-description">Description</label>
+              <textarea id="item-description" rows="3" maxlength="200" placeholder="Colour, brand, identifying marks..."></textarea>
+              <span class="char-count"><span id="desc-count">0</span>/200</span>
+            </div>
+
+            <div class="form-group">
+              <label for="item-contact">Contact (Email or 10-digit Phone) *</label>
+              <input type="text" id="item-contact" maxlength="60" placeholder="student@campus.edu or 9876543210">
+              <span class="error-msg" id="error-contact"></span>
+            </div>
+
+            <div class="btn-row">
+              <button type="submit" class="btn-primary grow">Submit Report</button>
+              <button type="reset" id="btn-reset" class="btn-outline">Clear</button>
+            </div>
+          </form>
+        </section>
+      </aside>
+
+      <!-- Listings -->
+      <section class="feed-section">
+        <div class="card glass-card filter-bar">
+          <div class="search-wrapper">
+            <label for="search-query" class="sr-only">Search</label>
+            <input type="search" id="search-query" placeholder="🔍 Search by item, location or description...">
+          </div>
+          <div class="filter-controls">
+            <select id="filter-type" aria-label="Filter by type">
+              <option value="all">All Types</option>
+              <option value="lost">Lost</option>
+              <option value="found">Found</option>
+            </select>
+            <select id="filter-category" aria-label="Filter by category">
+              <option value="all">All Categories</option>
+              <option>Electronics</option>
+              <option>Documents</option>
+              <option>Keys</option>
+              <option>Clothing</option>
+              <option>Accessories</option>
+              <option>Other</option>
+            </select>
+            <select id="filter-status" aria-label="Filter by status">
+              <option value="open">Open</option>
+              <option value="resolved">Resolved</option>
+              <option value="all">All Status</option>
+            </select>
+            <select id="sort-order" aria-label="Sort order">
+              <option value="newest">Newest First</option>
+              <option value="oldest">Oldest First</option>
+              <option value="title">Name A–Z</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="feed-toolbar">
+          <span id="result-count" class="muted">0 results</span>
+          <div class="btn-row">
+            <button id="btn-reset-filters" class="btn-link">Reset filters</button>
+            <button id="btn-export" class="btn-outline small">⬇ Export CSV</button>
+          </div>
+        </div>
+
+        <div id="items-grid" class="items-grid" aria-live="polite"></div>
+
+        <div id="empty-state" class="empty-state hidden">
+          <p class="empty-icon">📭</p>
+          <p>No records match your current search or filters.</p>
+        </div>
+      </section>
+    </div>
+
+    <!-- About -->
+    <section class="about" id="about">
+      <h2 class="section-title center">How It Works</h2>
+      <div class="steps">
+        <div class="card glass-card step"><span class="step-no">1</span><h3>Report</h3><p>Submit the item details, location and a contact channel.</p></div>
+        <div class="card glass-card step"><span class="step-no">2</span><h3>Search</h3><p>Filter listings by type, category, status or keyword.</p></div>
+        <div class="card glass-card step"><span class="step-no">3</span><h3>Reconnect</h3><p>Contact the reporter and mark the item as resolved.</p></div>
+      </div>
+      <p class="tech-note">Built with HTML5, CSS3 and Vanilla JavaScript (ES6) &middot; Data persisted using the browser <code>localStorage</code> API.</p>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <p>&copy; 2026 Smart Campus Lost &amp; Found Hub &middot; B.Tech Mini Project</p>
+    <p class="muted">Developed by: Your Name &middot; Roll No: XXXXXXX &middot; Dept. of Computer Science &amp; Engineering</p>
+  </footer>
+
+  <div id="toast-root" class="toast-root" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
